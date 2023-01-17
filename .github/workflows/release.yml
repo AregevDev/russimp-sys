@@ -87,7 +87,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: russimp-packages
-          path: {{ env.RUSSIMP_PACKAGE_DIR }}
+          path: ${{ env.RUSSIMP_PACKAGE_DIR }}
 
       - name: List artifacts
         run: |
