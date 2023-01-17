@@ -9,28 +9,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  create:
-    name: Create Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
-      - name: Create release on GitHub
-        id: rel
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          generate_release_notes: true
-          token: ${{ secrets.RUSSIMP_FORK_TOKEN }}
-    outputs:
-      upload_url: ${{ steps.rel.outputs.upload_url }}
-
   build:
     name: Build
-    needs: create
     runs-on: ${{ matrix.target.os }}
     strategy:
       matrix:
@@ -107,18 +87,21 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: russimp-packages
-          path: ./russimp-package
+          path: {{ env.RUSSIMP_PACKAGE_DIR }}
 
       - name: List artifacts
-        run: ls -l ./russimp-package
+        run: |
+          echo "Recieved artifacts:"
+          ls -l $RUSSIMP_PACKAGE_DIR
 
       - name: Publish release on GitHub
         uses: softprops/action-gh-release@v1
         with:
-          draft: false
-          token: ${{ secrets.RUSSIMP_FORK_TOKEN }}
-          # upload_url: ${{ needs.create.outputs.upload_url }}
-          files: |
-            ./russimp-package/*
+          generate_release_notes: true
           body: |
             This release was automatically created by GitHub Actions.
+          files: |
+            ${{ env.RUSSIMP_PACKAGE_DIR }}/*
+          token: ${{ secrets.RUSSIMP_FORK_TOKEN }}
+    env:
+      RUSSIMP_PACKAGE_DIR: ./russimp-package
