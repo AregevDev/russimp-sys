@@ -25,8 +25,8 @@ jobs:
           draft: true
           generate_release_notes: true
           token: ${{ secrets.RUSSIMP_FORK_TOKEN }}
-        outputs:
-          upload_url: ${{ steps.rel.outputs.upload_url }}
+    outputs:
+      upload_url: ${{ steps.rel.outputs.upload_url }}
 
   build:
     name: Build
