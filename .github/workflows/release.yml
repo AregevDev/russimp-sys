@@ -111,3 +111,14 @@ jobs:
 
       - name: List artifacts
         run: ls -l ./russimp-package
+
+      - name: Publish release on GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          token: ${{ secrets.RUSSIMP_FORK_TOKEN }}
+          # upload_url: ${{ needs.create.outputs.upload_url }}
+          files: |
+            ./russimp-package/*
+          body: |
+            This release was automatically created by GitHub Actions.
