@@ -33,7 +33,6 @@ jobs:
     needs: create
     runs-on: ${{ matrix.target.os }}
     strategy:
-      fail-fast: false
       matrix:
         target:
           - os: ubuntu-latest
@@ -91,6 +90,8 @@ jobs:
         with:
           name: russimp-packages
           path: ${{ env.RUSSIMP_PACKAGE_DIR }}/*
+        env:
+          RUSSIMP_PACKAGE_DIR: ./russimp-package
 
   publish:
     name: Publish Release
